@@ -5,8 +5,36 @@
 
 Despite all the recent hype, setting up a new TypeScript (x React) library can be tough. Between [Rollup](https://github.com/rollup/rollup), [Jest](https://github.com/facebook/jest), `tsconfig`, [Yarn resolutions](https://yarnpkg.com/en/docs/selective-version-resolutions), ESLint, and getting VSCode to play nicely....there is just a whole lot of stuff to do (and things to screw up). TSDX is a zero-config CLI that helps you develop, test, and publish modern TypeScript packages with ease--so you can focus on your awesome new library and not waste another afternoon on the configuration.
 
+> ### Changes
+> * Full ESM-CJS interop: `.cjs`/`.mjs` extensions, `"module"`/`"main"` fields, `"exports"` field. Ex:
+>   ```
+>   "main": "./dist/index.cjs",
+>   "module": "./dist/index.mjs",
+>   "exports": {
+>     "./package.json": "./package.json",
+>     ".": {
+>       "import": "./dist/index.mjs",
+>       "require": "./dist/index.cjs"
+>     }
+>   },
+>   ```
+> * Emits ES2020, Terser minification for ESM by default
+> * ES5 output now deprecated behind `build --legacy` flag
+> * Pass `--passWithNoTests` to Jest by default with `tsdx test`
+> * Package upgrades
+> 
+> ### Reasoning
+> * Smallest possible bundle sizes due to minimal transpilation
+> * Maximum ESM/CJS interop for Node 14+
+> * ESNext output and ESM/CJS interop changes leave all transpilation to lower featuresets up to library consumers downstream in order to minimize problems at compile-time, and prevent TSDX from enforcing a maximum featureset on consumers (previously, this was ES5).
+>   Inspired by module resolution issues with React Native's Metro importing TSDX modules. Also results in much smaller bundles, especially now that ESM is Terser'd by default.
+
+
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
 
 
 - [Features](#features)
